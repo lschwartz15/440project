@@ -164,6 +164,14 @@ class Processor(object):
         return self.final, self.markdown, self.meta
 
 
+class PageVersionManger(object):
+    def update_page(self, page):
+        return
+
+    def restore_page(self, page, version):
+        return
+
+
 class Page(object):
     def __init__(self, path, url, new=False):
         self.path = path
