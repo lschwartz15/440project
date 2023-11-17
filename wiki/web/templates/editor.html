@@ -8,6 +8,7 @@ Wiki Editor
 <ul class="nav nav-tabs">
 	<li class="active"><a href="#editor" data-toggle="tab">Editor</a></li>
 	<li><a href="#preview" data-toggle="tab" id="previewlink">Preview</a></li>
+    <li><a href="#history" data-toggle="tab" id="historylink">History</a></li>
 </ul>
 <div class="tab-content">
 	<div class="tab-pane active" id="editor">
@@ -17,17 +18,19 @@ Wiki Editor
 			{{ input(form.body, placeholder="Markdown", class="span7", rows="20") }}
 			{{ input(form.tags, placeholder="Tags (comma separated)", class="span7", autocomplete="off") }}
 			<div class="form-actions">
-        <div class="pull-left">
-          <a class="btn" href="#preview" id="previewbtn">Preview</a>
-        </div>
-				<div class="pull-right">
-          <a class="btn" href="{{ url_for('wiki.display', url=page.url) }}">Cancel</a>
-					<button class="btn btn-success" type="submit">Save</button>
-				</div>
+                <div class="pull-left">
+                  <a class="btn" href="#preview" id="previewbtn">Preview</a>
+                  <a class="btn" href="#history" id="historybtn">Restore Previous</a>
+                </div>
+                <div class="pull-right">
+                  <a class="btn" href="{{ url_for('wiki.display', url=page.url) }}">Cancel</a>
+                  <button class="btn btn-success" type="submit">Save</button>
+                </div>
 			</div>
 		</form>
 	</div>
 	<div class="tab-pane" id="preview"></div>
+    <div class="tab-pane" id="history"></div>
 </div>
 {% endblock content %}
 
@@ -58,7 +61,7 @@ Turns into:
 {% block postscripts -%}
 {{ super() }}
 $('#previewlink').on('click', function() {
-	var $form = $('.form');
+  var $form = $('.form');
   var $inputs = $form.find('input, textarea, button');
   var $pre = $('#preview');
   var bodycontent = 'title: preview\n\n' + $form.find('textarea').val();
@@ -81,8 +84,32 @@ $('#previewlink').on('click', function() {
     }
   });
 });
+$('#historylink').on('click', function() {
+  var $form = $('.form');
+  var $pre = $('#history');
+  $.ajax({
+    url: "{{ url_for('wiki.history', url=page.url) }}",
+    type: "POST",
+    success: function(msg) {
+      $pre.html(msg);
+      console.log(msg);
+    }
+  });
+});
+$('#restorelink').on('click', function() {
+  var version = $(this).attr('href')
+  $.ajax({
+    url: "{{ url_for('wiki.restore', url=page.url, version='') }}",
+    type: "POST",
+    data: { version: version },
+  });
+});
 $('#previewbtn').on('click', function(event) {
 	event.preventDefault();
 	$('#previewlink').click();
+});
+$('#historybtn').on('click', function(event) {
+	event.preventDefault();
+	$('#historylink').click();
 });
 {%- endblock postscripts %}
