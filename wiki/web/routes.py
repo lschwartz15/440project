@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -25,6 +25,8 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+import os
+import json
 
 import pyotp
 import qrcode
@@ -157,7 +159,7 @@ def mfa():
     uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
     print(uri)
 
-    directory = os.path.join(os.path.dirname(__file__), 'static/qr-code-imgs')
+    directory = os.path.join(os.path.dirname(__file__), 'web/static/qr-code-imgs')
     if not os.path.exists(directory):
         os.makedirs(directory)
 
@@ -214,6 +216,74 @@ def user_admin(user_id):
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
+
+
+# SURVEY RESULTS
+import json
+import os
+
+@bp.route("/survey", methods=["POST", "GET"])
+def survey():
+    if request.method == "POST":
+        # Extract form data
+        name = request.form.get("nm")
+        rating = request.form.get("rating")
+        bugsEncountered = request.form.get("bugsEncountered")
+        suggestions = request.form.get("suggestions")
+
+        # Create a dictionary of the form data
+        survey_data = {
+            "name": name,
+            "rating": rating,
+            "bugsEncountered": bugsEncountered,
+            "suggestions": suggestions
+        }
+
+        # Get the directory of the current file (routes.py)
+        directory = os.path.dirname(os.path.realpath(__file__))
+
+        # File path for the JSON file
+        file_path = os.path.join(directory, 'survey_results.json')
+
+        # Initialize data as an empty list
+        data = []
+
+        # Read existing data, if file exists and is not empty
+        if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
+            with open(file_path, 'r') as file:
+                try:
+                    data = json.load(file)
+                except json.JSONDecodeError:
+                    # If JSON is invalid, initialize data as an empty list
+                    data = []
+
+        # Append new survey data
+        data.append(survey_data)
+
+        # Write the updated data back to the file
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+        # Redirect to a route to display the result or a thank you page
+        return redirect(url_for('wiki.surveyP2', name=name, rating=rating, bugsEncountered=bugsEncountered, suggestions=suggestions))
+    else:
+        # Render a template if GET request
+        return render_template("home.html")
+
+
+
+@bp.route("/surveyP2")
+def surveyP2():
+    name = request.args.get('name')
+    rating = request.args.get('rating')
+    bugsEncountered = request.args.get('bugsEncountered')
+    suggestions = request.args.get('suggestions')
+
+    return f"<h1>Survey Results</h1><p>Name: {name}</p><p>Rating: {rating}</p><p>Bugs Encountered: {bugsEncountered}</p><p>Suggestions: {suggestions}</p>"
+
+
+
+
 
 
 """
