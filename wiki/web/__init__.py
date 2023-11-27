@@ -33,6 +33,12 @@ def create_app(directory):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
+    app.config["SECRET_KEY"] = "Secret1234"
+    app.config["RECAPTCHA_USE_SSL"] = False
+    # This Get from Google Dashboard
+    app.config["RECAPTCHA_PUBLIC_KEY"] = "6LettxwpAAAAAFrwnb1R8aDYPBTJTw3xO3tHZ1iX"
+    app.config["RECAPTCHA_PRIVATE_KEY"] = "6LettxwpAAAAAM8PhBfFxBQBMRGtseYCrFd9nxt5"
+    app.config["RECAPTCHA_OPTIONS"] = {'theme': 'black'}
     try:
         app.config.from_pyfile(
             os.path.join(app.config.get('CONTENT_DIR'), 'config.py')

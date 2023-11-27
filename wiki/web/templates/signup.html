@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ page.title }}
+{% endblock title %}
+
+{% block content %}
+    <h1>Sign Up</h1>
+    <form method="POST" action="{{ url_for('wiki.signup') }}">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.name.label }} {{ form.name }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }} {{ form.password }}
+        </div>
+        <div class="form-group">
+            {{ form.recaptcha.label }} {{ form.recaptcha }}
+        </div>
+        <div class="form-group">
+            {{ form.submit }}
+        </div>
+    </form>
+{% endblock content %}

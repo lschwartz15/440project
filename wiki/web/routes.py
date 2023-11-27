@@ -8,12 +8,16 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import session
+from flask import send_from_directory
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
+
 from wiki.core import Processor
+from wiki.web.forms import SignUpForm
 from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
@@ -22,6 +26,10 @@ from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
 
+import pyotp
+import qrcode
+import os
+import random
 
 bp = Blueprint('wiki', __name__)
 
@@ -128,7 +136,41 @@ def search():
                                results=results, search=form.term.data)
     return render_template('search.html', form=form, search=None)
 
+@bp.route('/signup/', methods=['GET', 'POST'])
+def signup():
+    form = SignUpForm()  # Correct the form class name to SignupForm
+    if form.validate_on_submit():
+        user_name = form.name.data
+        return redirect(url_for('wiki.mfa', name=user_name))
+    page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
+    return render_template('signup.html', form=form, page=page_data)
 
+@bp.route('/mfa/', methods=['GET', 'POST'])
+def mfa():
+    page = {'title': 'MFA Page'}
+    user_name = request.args.get('name')
+    issuer_name = "SethSuttonApp"
+    # Random generate of the secret key
+    key = pyotp.random_base32()
+    # Temporary One Time Password
+    totp = pyotp.TOTP(key)
+    uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
+    print(uri)
+
+    directory = os.path.join(os.path.dirname(__file__), 'static/qr-code-imgs')
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Generate a random number for the QR code image filename
+    random_number = random.randint(1, 100)
+    qrcode_path = f"static/qr-code-imgs/totp_qr_code{random_number}.png"
+    print(f"Generated QR Code Path: {qrcode_path}")
+    # Create and save the QR code image
+    qrcode.make(uri).save(qrcode_path)
+    # Store the generated key in the session for later use in the /login route
+    session['random_key'] = key
+
+    return render_template('mfa.html',page=page, qrcode_path=qrcode_path)
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
@@ -140,6 +182,10 @@ def user_login():
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
 
+
+@bp.route('/static/qr-code-imgs/<filename>')
+def serve_qr_code(filename):
+    return send_from_directory('static/qr-code-imgs', filename)
 
 @bp.route('/user/logout/')
 @login_required
