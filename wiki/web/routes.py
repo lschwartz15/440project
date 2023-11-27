@@ -159,13 +159,13 @@ def mfa():
     uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
     print(uri)
 
-    directory = os.path.join(os.path.dirname(__file__), 'web/static/qr-code-imgs')
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # directory = os.path.join(os.path.dirname(__file__), 'wiki/web/static/qr-code-imgs')
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
 
     # Generate a random number for the QR code image filename
     random_number = random.randint(1, 100)
-    qrcode_path = f"static/qr-code-imgs/totp_qr_code{random_number}.png"
+    qrcode_path = f'440project/wiki/web/static/qr-code-imgs/totp_qr_code{random_number}.png'
     print(f"Generated QR Code Path: {qrcode_path}")
     # Create and save the QR code image
     qrcode.make(uri).save(qrcode_path)
@@ -173,6 +173,7 @@ def mfa():
     session['random_key'] = key
 
     return render_template('mfa.html',page=page, qrcode_path=qrcode_path)
+
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
