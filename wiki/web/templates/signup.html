@@ -17,8 +17,9 @@
         <div class="form-group">
             {{ form.recaptcha.label }} {{ form.recaptcha }}
         </div>
+        <br>
         <div class="form-group">
-            {{ form.submit }}
+            {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
 {% endblock content %}

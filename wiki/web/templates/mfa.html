@@ -5,25 +5,24 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>Multi-Factor Authentication</h1>
-
     <section style="display: flex; flex-direction: column;">
-        <h2>You made it to MFA</h2>
-        <img src="{{ qrcode_path }}" alt="QR Code for Authenticator App">
-        <!--<img src="{{ url_for('wiki.serve_qr_code', filename=qrcode_path) }}" alt="QR Code for Authenticator App" width="200" height="200">-->
+        <h2>QR code</h2>
+        <p>Please scan this QR with your authenticator app</p>
+        <img src="{{ url_for('wiki.path_static', filename=qrcode_filename) }}" alt="MFA QR Code" width="200" height="200">
         <p>To enhance your security, we recommend using an authenticator app for two-factor authentication.</p>
-        <p>Download an authenticator app from:</p>
+        <p>You can download an authenticator app from the link buttons:</p>
         <a href="https://play.google.com/store/" target="_blank">
-            <button>Google Play Store</button>
+            <button class="btn btn-primary">Google Play Store</button>
         </a><br>
         <a href="https://www.apple.com/app-store/" target="_blank">
-            <button>Apple App Store</button>
+            <button class="btn btn-primary">Apple App Store</button>
         </a><br>
     </section>
 
     <p>Once you have the TOTP token, click the "Login Page" button.</p>
     <a href="{{ url_for('wiki.user_login') }}">
-        <button>Login Page</button>
+        <button class="btn btn-primary">Login Page</button>
     </a>
+
 {% endblock content %}
 

@@ -138,6 +138,7 @@ def search():
                                results=results, search=form.term.data)
     return render_template('search.html', form=form, search=None)
 
+
 @bp.route('/signup/', methods=['GET', 'POST'])
 def signup():
     form = SignUpForm()  # Correct the form class name to SignupForm
@@ -147,33 +148,43 @@ def signup():
     page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
     return render_template('signup.html', form=form, page=page_data)
 
+
 @bp.route('/mfa', methods=['GET'])
 def mfa():
     page = {'title': 'MFA Page'}
     user_name = request.args.get('name')
     issuer_name = "SethSuttonApp"
+
     # Random generate of the secret key
     key = pyotp.random_base32()
+
     # Temporary One Time Password
     totp = pyotp.TOTP(key)
     uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
-    print(uri)
-
-    # directory = os.path.join(os.path.dirname(__file__), 'wiki/web/qr')
-    # if not os.path.exists(directory):
-    #     os.makedirs(directory)
 
     # Generate a random number for the QR code image filename
     random_number = random.randint(1, 100)
-    qrcode_path = f"qr/totp_qr_code{random_number}.png"
-    print(f"Generated QR Code Path: {qrcode_path}")
+    qrcode_filename = f"totp_qr_code{random_number}.png"
+
+    # Specify the folder where your QR code images are stored
+    qrcode_folder = os.path.join(os.path.abspath("wiki/web/static/QRimages"))
+
+    # Construct the full path to the QR code image
+    qrcode_path = os.path.join(qrcode_folder, qrcode_filename)
+
     # Create and save the QR code image
     qrcode.make(uri).save(qrcode_path)
-    print(f"QR Code Image Saved: {qrcode_path}")
+
     # Store the generated key in the session for later use in the /login route
     session['random_key'] = key
 
-    return render_template('mfa.html', page=page, qrcode_path=qrcode_path)
+    return render_template('mfa.html', page=page, qrcode_path=qrcode_path, qrcode_filename=qrcode_filename)
+
+
+@bp.route('/QRimages/<filename>')
+def path_static(filename):
+    return send_from_directory(os.path.abspath("wiki/web/static/QRimages"), filename)
+
 
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
@@ -190,7 +201,7 @@ def user_login():
             return "Code was Successful"
         else:
             flash("Invalid TOTP code. Please try again.")
-            
+
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
@@ -199,10 +210,6 @@ def user_login():
         return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
 
-
-@bp.route('/qr/<filename>')
-def serve_qr_code(filename):
-    return send_from_directory('qr', filename)
 
 @bp.route('/user/logout/')
 @login_required
