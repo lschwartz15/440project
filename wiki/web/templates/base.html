@@ -86,33 +86,38 @@
 
 <!--SURVEY-->
 <div id="surveyPopup" style="display:none; position:fixed; top:20%; left:20%; width:60%; height:60%; background-color:lightblue; padding:20px; box-shadow:0 0 10px rgba(0,0,0,0.5); z-index:1000;">
-    <h2>Exit Survey</h2>
+	<form action="/survey" method="post">
+		<h2>Exit Survey</h2>
+		<p>Name:</p>
+		<p><input tupe="text" name="nm"></p>
+		<div>
+        	<p>Rate your experience (1-5):</p>
+        	<div id="starRating">
+				<!-- Stars (1-5) -->
+				<span class="star" data-value="1">&#9734;</span>
+				<span class="star" data-value="2">&#9734;</span>
+				<span class="star" data-value="3">&#9734;</span>
+				<span class="star" data-value="4">&#9734;</span>
+				<span class="star" data-value="5">&#9734;</span>
+        	</div>
+			<input type="hidden" name="rating" id="ratingValue">
+    	</div>
 
-    <div>
-        <p>Rate your experience (1-5):</p>
-        <div id="starRating">
-            <!-- Stars (1-5) -->
-            <span class="star" data-value="1">&#9734;</span>
-            <span class="star" data-value="2">&#9734;</span>
-            <span class="star" data-value="3">&#9734;</span>
-            <span class="star" data-value="4">&#9734;</span>
-            <span class="star" data-value="5">&#9734;</span>
-        </div>
-    </div>
+		<div>
+			<p>Did you encounter any bugs?</p>
+			<label><input type="radio" name="bugsEncountered" value="yes"> Yes</label>
+			<label><input type="radio" name="bugsEncountered" value="no"> No</label>
+		</div>
 
-    <div>
-        <p>Did you encounter any bugs?</p>
-        <label><input type="radio" name="bugsEncountered" value="yes"> Yes</label>
-        <label><input type="radio" name="bugsEncountered" value="no"> No</label>
-    </div>
+		<div>
+			<p>Do you have any suggestions for us?</p>
+			<textarea name="suggestions" id="suggestions" rows="4" cols="50"></textarea>
+		</div>
 
-    <div>
-        <p>Do you have any suggestions for us?</p>
-        <textarea id="suggestions" rows="4" cols="50"></textarea>
-    </div>
-
-    <button onclick="submitSurvey()">Submit</button>
-    <button onclick="closePopup()">Close</button>
+		<!--<button onclick="submitSurvey()">Submit</button>-->
+		<p><input type="submit" value="submit"></p>
+		<button onclick="closePopup()">Close</button>
+	</form>
 </div>
 
 <style>
@@ -163,6 +168,7 @@
     let rating = 0;
     function setRating(event) {
         rating = event.currentTarget.getAttribute('data-value');
+		document.getElementById('ratingValue').value = rating;
         const stars = document.querySelectorAll('.star');
         stars.forEach(star => {
             star.classList[star.getAttribute('data-value') <= rating ? 'add' : 'remove']('rated');

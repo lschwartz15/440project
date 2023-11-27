@@ -173,31 +173,70 @@ def user_delete(user_id):
 
 
 # SURVEY RESULTS
-@bp.route('/submit_survey', methods=['POST'])
-@protect
-def submit_survey():
-    # Get the JSON data from the request
-    survey_data = request.get_json()
+import json
+import os
 
-    # Define the path where the survey_results.json will be stored
-    # Assuming 'contents' is a directory at the same level as this script
-    directory = os.path.join(os.getcwd(), 'contents')
-    file_path = os.path.join(directory, 'survey_results.json')
+@bp.route("/survey", methods=["POST", "GET"])
+def survey():
+    if request.method == "POST":
+        # Extract form data
+        name = request.form.get("nm")
+        rating = request.form.get("rating")
+        bugsEncountered = request.form.get("bugsEncountered")
+        suggestions = request.form.get("suggestions")
 
-    # Read the existing data and update it
-    if os.path.isfile(file_path):
-        with open(file_path, 'r') as json_file:
-            data = json.load(json_file)
-    else:
+        # Create a dictionary of the form data
+        survey_data = {
+            "name": name,
+            "rating": rating,
+            "bugsEncountered": bugsEncountered,
+            "suggestions": suggestions
+        }
+
+        # Get the directory of the current file (routes.py)
+        directory = os.path.dirname(os.path.realpath(__file__))
+
+        # File path for the JSON file
+        file_path = os.path.join(directory, 'survey_results.json')
+
+        # Initialize data as an empty list
         data = []
 
-    data.append(survey_data)  # Append the new survey data to the existing list
+        # Read existing data, if file exists and is not empty
+        if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
+            with open(file_path, 'r') as file:
+                try:
+                    data = json.load(file)
+                except json.JSONDecodeError:
+                    # If JSON is invalid, initialize data as an empty list
+                    data = []
 
-    # Write the updated data back to the file
-    with open(file_path, 'w') as json_file:
-        json.dump(data, json_file, indent=4)
+        # Append new survey data
+        data.append(survey_data)
 
-    return jsonify(success=True)
+        # Write the updated data back to the file
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+        # Redirect to a route to display the result or a thank you page
+        return redirect(url_for('wiki.surveyP2', name=name, rating=rating, bugsEncountered=bugsEncountered, suggestions=suggestions))
+    else:
+        # Render a template if GET request
+        return render_template("home.html")
+
+
+
+@bp.route("/surveyP2")
+def surveyP2():
+    name = request.args.get('name')
+    rating = request.args.get('rating')
+    bugsEncountered = request.args.get('bugsEncountered')
+    suggestions = request.args.get('suggestions')
+
+    return f"<h1>Survey Results</h1><p>Name: {name}</p><p>Rating: {rating}</p><p>Bugs Encountered: {bugsEncountered}</p><p>Suggestions: {suggestions}</p>"
+
+
+
 
 
 
