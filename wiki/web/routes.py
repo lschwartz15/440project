@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint
+from flask import Blueprint, jsonify
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -21,6 +21,8 @@ from wiki.web.forms import URLForm
 from wiki.web import current_wiki
 from wiki.web import current_users
 from wiki.web.user import protect
+import os
+import json
 
 
 bp = Blueprint('wiki', __name__)
@@ -168,6 +170,35 @@ def user_admin(user_id):
 @bp.route('/user/delete/<int:user_id>/')
 def user_delete(user_id):
     pass
+
+
+# SURVEY RESULTS
+@bp.route('/submit_survey', methods=['POST'])
+@protect
+def submit_survey():
+    # Get the JSON data from the request
+    survey_data = request.get_json()
+
+    # Define the path where the survey_results.json will be stored
+    # Assuming 'contents' is a directory at the same level as this script
+    directory = os.path.join(os.getcwd(), 'contents')
+    file_path = os.path.join(directory, 'survey_results.json')
+
+    # Read the existing data and update it
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as json_file:
+            data = json.load(json_file)
+    else:
+        data = []
+
+    data.append(survey_data)  # Append the new survey data to the existing list
+
+    # Write the updated data back to the file
+    with open(file_path, 'w') as json_file:
+        json.dump(data, json_file, indent=4)
+
+    return jsonify(success=True)
+
 
 
 """
