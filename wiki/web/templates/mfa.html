@@ -9,8 +9,8 @@
 
     <section style="display: flex; flex-direction: column;">
         <h2>You made it to MFA</h2>
-        <img src="{{ url_for('wiki.serve_qr_code', filename='totp_qr_code94.png') }}" alt="QR Code for Authenticator App" width="200" height="200">
-        <img src="{{ url_for('wiki.serve_qr_code', filename=qrcode_path) }}" alt="QR Code for Authenticator App" width="200" height="200">
+        <img src="{{ qrcode_path }}" alt="QR Code for Authenticator App">
+        <!--<img src="{{ url_for('wiki.serve_qr_code', filename=qrcode_path) }}" alt="QR Code for Authenticator App" width="200" height="200">-->
         <p>To enhance your security, we recommend using an authenticator app for two-factor authentication.</p>
         <p>Download an authenticator app from:</p>
         <a href="https://play.google.com/store/" target="_blank">

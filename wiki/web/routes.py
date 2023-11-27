@@ -147,7 +147,7 @@ def signup():
     page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
     return render_template('signup.html', form=form, page=page_data)
 
-@bp.route('/mfa/', methods=['GET', 'POST'])
+@bp.route('/mfa', methods=['GET'])
 def mfa():
     page = {'title': 'MFA Page'}
     user_name = request.args.get('name')
@@ -159,24 +159,38 @@ def mfa():
     uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
     print(uri)
 
-    # directory = os.path.join(os.path.dirname(__file__), 'wiki/web/static/qr-code-imgs')
+    # directory = os.path.join(os.path.dirname(__file__), 'wiki/web/qr')
     # if not os.path.exists(directory):
     #     os.makedirs(directory)
 
     # Generate a random number for the QR code image filename
     random_number = random.randint(1, 100)
-    qrcode_path = f'440project/wiki/web/static/qr-code-imgs/totp_qr_code{random_number}.png'
+    qrcode_path = f"qr/totp_qr_code{random_number}.png"
     print(f"Generated QR Code Path: {qrcode_path}")
     # Create and save the QR code image
     qrcode.make(uri).save(qrcode_path)
+    print(f"QR Code Image Saved: {qrcode_path}")
     # Store the generated key in the session for later use in the /login route
     session['random_key'] = key
 
-    return render_template('mfa.html',page=page, qrcode_path=qrcode_path)
+    return render_template('mfa.html', page=page, qrcode_path=qrcode_path)
 
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
+    if request.method == 'POST':
+        user_input_code = request.form.get('totp_code')  # Get the TOTP code input from the form
+        user_secret_key = session.get('random_key') # getting Secret Key from MFA method using session
+
+        totp = pyotp.TOTP(user_secret_key)
+        is_valid = totp.verify(user_input_code)
+
+        if is_valid:
+            flash("Login successful!")  # Use the 'flash' function to display a success message
+            return "Code was Successful"
+        else:
+            flash("Invalid TOTP code. Please try again.")
+            
     if form.validate_on_submit():
         user = current_users.get_user(form.name.data)
         login_user(user)
@@ -186,9 +200,9 @@ def user_login():
     return render_template('login.html', form=form)
 
 
-@bp.route('/static/qr-code-imgs/<filename>')
+@bp.route('/qr/<filename>')
 def serve_qr_code(filename):
-    return send_from_directory('static/qr-code-imgs', filename)
+    return send_from_directory('qr', filename)
 
 @bp.route('/user/logout/')
 @login_required
