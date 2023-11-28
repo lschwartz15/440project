@@ -217,8 +217,8 @@ def user_login():
         user_secret_key = session.get('random_key')
 
         if not user_secret_key:
-            flash("User does not have a TOTP secret. Please set up two-factor authentication.")  # Display an error message
-            return render_template('login.html', form=form)
+            flash("You needs to a new MFA. Please reScan the QR Code")  # Error message routes you back to MFA
+            return render_template('mfa.html', form=form)
 
         totp = pyotp.TOTP(user_secret_key)
         is_valid = totp.verify(user_input_code)
@@ -229,7 +229,7 @@ def user_login():
             flash('Login successful.', 'success')
             return redirect(request.args.get("next") or url_for('wiki.index'))
         else:
-            flash("Invalid TOTP code. Please try again.")  # Display an error message
+            flash("Invalid TOTP code. Please try again.")  # Error message
 
     return render_template('login.html', form=form)
 

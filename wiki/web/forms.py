@@ -62,12 +62,6 @@ class LoginForm(FlaskForm):
         if not user.check_password(field.data):
             raise ValidationError('Invalid username or password.')
 
-    # def validate_totp(self, field):
-    #     user = current_users.get_user(self.name.data)
-    #     if not user:
-    #         return
-    #     if not user.check_totp(field.data):
-    #         raise ValidationError('Invalid username or 6-digit code.')
 class SignUpForm(FlaskForm):
     name = StringField('Username', validators=[InputRequired(), Length(max=255)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8)])

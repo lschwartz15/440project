@@ -3,11 +3,11 @@
 {% block title %}Login{% endblock title %}
 
 {% block content %}
-<form class="form form-inline" method="POST">
-	{{ form.hidden_tag() }}
-	{{ form.name(placeholder='Username') }}
-	{{ form.password(placeholder='Password') }}
+  <form class="form form-inline" method="POST">
+    {{ form.hidden_tag() }}
+    {{ form.name(placeholder='Username') }}
+    {{ form.password(placeholder='Password') }}
     {{ form.totp(placeholder='6 digit code') }}
-	<input type="submit" class="btn btn-primary" value="Login">
-</form>
+    <input type="submit" class="btn btn-primary" value="Login">
+  </form>
 {% endblock content %}

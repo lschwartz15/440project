@@ -13,6 +13,7 @@ from flask_login import current_user
 
 
 
+
 class UserManager(object):
     """A very simple user Manager, that saves it's data as json."""
     def __init__(self, path):
@@ -117,6 +118,7 @@ class User(object):
             result = (self.get('password') == password)
         else:
             raise NotImplementedError(authentication_method)
+
         return result
 
 
