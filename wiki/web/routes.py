@@ -2,7 +2,7 @@
     Routes
     ~~~~~~
 """
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, make_response
 from flask import flash
 from flask import redirect
 from flask import render_template
@@ -193,6 +193,9 @@ def survey():
             "suggestions": suggestions
         }
 
+        # Create a simple HTML response for the confirmation message
+        confirmation_html = "<div>Thank you for submitting the survey!</div>"
+
         # Get the directory of the current file (routes.py)
         directory = os.path.dirname(os.path.realpath(__file__))
 
@@ -218,12 +221,16 @@ def survey():
         with open(file_path, 'w') as file:
             json.dump(data, file, indent=4)
 
-        # Redirect to a route to display the result or a thank you page
-        return redirect(url_for('wiki.surveyP2', name=name, rating=rating, bugsEncountered=bugsEncountered, suggestions=suggestions))
+        return redirect(url_for('wiki.survey_confirmation'))
+        # return redirect(url_for('wiki.surveyP2', name=name, rating=rating, bugsEncountered=bugsEncountered, suggestions=suggestions))
     else:
         # Render a template if GET request
         return render_template("home.html")
 
+
+@bp.route("/survey_confirmation")
+def survey_confirmation():
+    return render_template("survey_confirmation.html")
 
 
 @bp.route("/surveyP2")
