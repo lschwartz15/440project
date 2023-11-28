@@ -62,6 +62,12 @@ class LoginForm(FlaskForm):
         if not user.check_password(field.data):
             raise ValidationError('Invalid username or password.')
 
+    def validate(self):
+        if not super().validate():
+            return False
+        return True
+
+
 class SignUpForm(FlaskForm):
     name = StringField('Username', validators=[InputRequired(), Length(max=255)])
     password = PasswordField('Password', validators=[InputRequired(), Length(min=8)])

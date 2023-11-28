@@ -117,7 +117,7 @@
 
 		<!--<button onclick="submitSurvey()">Submit</button>-->
 		<p><input type="submit" value="submit"></p>
-		<button onclick="closePopup()">Close</button>
+		<button type="button" onclick="closePopup()">Close</button>
 	</form>
 </div>
 
@@ -133,12 +133,14 @@
 </style>
 
 <script>
+	 let userNavigatingAway = false;
     function showSurveyPopup() {
         document.getElementById('surveyPopup').style.display = 'block';
     }
 
     function closePopup() {
         document.getElementById('surveyPopup').style.display = 'none';
+		userNavigatingAway = true;
     }
 
     function submitSurvey() {
@@ -154,8 +156,10 @@
     });
 
     window.addEventListener('beforeunload', function (e) {
-        e.preventDefault();
-        e.returnValue = '';
+         if (!userNavigatingAway) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
     });
 
     // Star Rating Logic
