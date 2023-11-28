@@ -199,23 +199,11 @@ def user_login():
 
     if request.method == 'POST' and form.validate_on_submit():
         username = form.name.data
-        password = form.password.data
         user_input_code = form.totp.data
 
         user = current_users.get_user(username)
-
-        if not user:
-            flash("Invalid username. Please try again.")  # Display an error message
-            return render_template('login.html', form=form)
-
-        # Check the password first
-        if not user.check_password(password):
-            flash("Invalid password. Please try again.")  # Display an error message
-            return render_template('login.html', form=form)
-
         # Check TOTP
         user_secret_key = session.get('random_key')
-
         if not user_secret_key:
             flash("You needs to a new MFA. Please reScan the QR Code")  # Error message routes you back to MFA
             return render_template('mfa.html', form=form)
