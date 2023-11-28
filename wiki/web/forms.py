@@ -17,6 +17,8 @@ from wiki.core import clean_url
 from wiki.web import current_wiki
 from wiki.web import current_users
 
+import json
+import os
 
 class URLForm(FlaskForm):
     url = StringField('', [InputRequired()])
@@ -45,35 +47,72 @@ class EditorForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     name = StringField('', [InputRequired(), Length(max=255)])
-    password = PasswordField('', [InputRequired(),Length(min=8)])
-    totp = StringField('', [InputRequired()])
-    def validate_name(form, field):
+    password = PasswordField('', [InputRequired(), Length(min=8)])
+    totp = StringField('', [InputRequired(), Length(max=6, min=6)])
+
+    def validate_name(self, field):
         user = current_users.get_user(field.data)
         if not user:
-            raise ValidationError('This username does not exist.')
+            raise ValidationError('Invalid username.')
 
-    def validate_password(form, field):
-        user = current_users.get_user(form.name.data)
+    def validate_password(self, field):
+        user = current_users.get_user(self.name.data)
         if not user:
             return
         if not user.check_password(field.data):
-            raise ValidationError('Username and password do not match.')
+            raise ValidationError('Invalid username or password.')
 
-    # def validate_totp(form, field):
-    #     user = current_users.get_user(form.name.data)
+    # def validate_totp(self, field):
+    #     user = current_users.get_user(self.name.data)
     #     if not user:
     #         return
     #     if not user.check_totp(field.data):
-    #         raise ValidationError('Username and 6 digit code does not match.')
+    #         raise ValidationError('Invalid username or 6-digit code.')
 class SignUpForm(FlaskForm):
-    name = StringField('', [InputRequired()])
-    password = PasswordField('', [InputRequired()])
+    name = StringField('Username', validators=[InputRequired(), Length(max=255)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(min=8)])
     recaptcha = RecaptchaField()
     submit = SubmitField('Sign Up')
 
-    def validate_username(self, field):
+    def validate_name(self, field):
+        # Checks if the username is already taken
         user = current_users.get_user(field.data)
         if user:
             raise ValidationError('This username is already taken. Please choose a different one.')
+
+    def save_user_to_json(self):
+        #New users login
+        username = self.name.data
+        password = self.password.data
+
+        # Load existing user data for checking if the user was preivously made
+        current_file_path = os.path.abspath(__file__)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))
+        file_path = os.path.join(project_root, 'user', 'users.json')
+
+        with open(file_path, 'r') as file:
+            users_data = json.load(file)
+
+        # Checks if the username exist
+        if username in users_data:
+            raise ValidationError('This username is already taken. Please choose a different one.')
+
+        # Adds new user
+        users_data[username] = {
+            "active": True,
+            "authentication_method": "cleartext",
+            "password": password,
+            "authenticated": True,
+            "roles": []
+        }
+
+        # Save the updated user data
+        current_file_path = os.path.abspath(__file__)
+        project_root = os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))
+        file_path = os.path.join(project_root, 'user', 'users.json')
+        with open(file_path, 'w') as file:
+            json.dump(users_data, file, indent=2)
+
+        print("Signup successful.")
 
 

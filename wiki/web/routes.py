@@ -14,6 +14,7 @@ from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from wtforms.validators import ValidationError
 
 
 from wiki.core import Processor
@@ -141,19 +142,26 @@ def search():
 
 @bp.route('/signup/', methods=['GET', 'POST'])
 def signup():
-    form = SignUpForm()  # Correct the form class name to SignupForm
+    form = SignUpForm()
+
     if form.validate_on_submit():
-        user_name = form.name.data
-        return redirect(url_for('wiki.mfa', name=user_name))
+        try:
+            form.save_user_to_json()
+            flash('Signup successful!', 'success')
+            return redirect(url_for('wiki.mfa', name=form.name.data))
+        except ValidationError as e:
+            flash(str(e), 'danger')
+
     page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
     return render_template('signup.html', form=form, page=page_data)
+
 
 
 @bp.route('/mfa', methods=['GET'])
 def mfa():
     page = {'title': 'MFA Page'}
     user_name = request.args.get('name')
-    issuer_name = "SethSuttonApp"
+    issuer_name = "Riki"
 
     # Random generate of the secret key
     key = pyotp.random_base32()
@@ -189,26 +197,43 @@ def path_static(filename):
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
-    if request.method == 'POST':
-        user_input_code = request.form.get('totp_code')  # Get the TOTP code input from the form
-        user_secret_key = session.get('random_key') # getting Secret Key from MFA method using session
+
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.name.data
+        password = form.password.data
+        user_input_code = form.totp.data
+
+        user = current_users.get_user(username)
+
+        if not user:
+            flash("Invalid username. Please try again.")  # Display an error message
+            return render_template('login.html', form=form)
+
+        # Check the password first
+        if not user.check_password(password):
+            flash("Invalid password. Please try again.")  # Display an error message
+            return render_template('login.html', form=form)
+
+        # Check TOTP
+        user_secret_key = session.get('random_key')
+
+        if not user_secret_key:
+            flash("User does not have a TOTP secret. Please set up two-factor authentication.")  # Display an error message
+            return render_template('login.html', form=form)
 
         totp = pyotp.TOTP(user_secret_key)
         is_valid = totp.verify(user_input_code)
 
         if is_valid:
-            flash("Login successful!")  # Use the 'flash' function to display a success message
-            return "Code was Successful"
+            login_user(user)
+            user.set('authenticated', True)
+            flash('Login successful.', 'success')
+            return redirect(request.args.get("next") or url_for('wiki.index'))
         else:
-            flash("Invalid TOTP code. Please try again.")
+            flash("Invalid TOTP code. Please try again.")  # Display an error message
 
-    if form.validate_on_submit():
-        user = current_users.get_user(form.name.data)
-        login_user(user)
-        user.set('authenticated', True)
-        flash('Login successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
     return render_template('login.html', form=form)
+
 
 
 @bp.route('/user/logout/')

@@ -27,7 +27,6 @@
 
 							<ul class="nav pull-right">
                             <li><a href="{{ url_for('wiki.signup') }}">Sign Up</a></li>
-							<li><a href="{{ url_for('wiki.mfa')}}">MFA</a></li>
                             {% if current_user.is_anonymous %}
                                 <li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
                             {% else %}
