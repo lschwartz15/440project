@@ -170,9 +170,8 @@ def mfa():
     totp = pyotp.TOTP(key)
     uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
 
-    # Generate a random number for the QR code image filename
-    random_number = random.randint(1, 100)
-    qrcode_filename = f"totp_qr_code{random_number}.png"
+    # Generate the users for the QR code image filename with the user name
+    qrcode_filename = f"{user_name}_totp_qr_code.png"
 
     # Specify the folder where your QR code images are stored
     qrcode_folder = os.path.join(os.path.abspath("wiki/web/static/QRimages"))
