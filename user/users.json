@@ -12,33 +12,5 @@
     "password": "1234",
     "authenticated": true,
     "roles": []
-  },
-  "JohnDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": true,
-    "roles": []
-  },
-  "JeanDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": true,
-    "roles": []
-  },
-  "CaptainAmerica": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": true,
-    "roles": []
-  },
-  "JoeDirt": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": true,
-    "roles": []
   }
 }
