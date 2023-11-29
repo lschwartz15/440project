@@ -34,6 +34,7 @@ import qrcode
 import os
 import random
 
+
 bp = Blueprint('wiki', __name__)
 
 
@@ -251,10 +252,7 @@ def user_delete(user_id):
     pass
 
 
-# SURVEY RESULTS
-import json
-import os
-
+# SURVEY ROUTES
 @bp.route("/survey", methods=["POST", "GET"])
 def survey():
     if request.method == "POST":
@@ -301,7 +299,6 @@ def survey():
             json.dump(data, file, indent=4)
 
         return redirect(url_for('wiki.survey_confirmation'))
-        # return redirect(url_for('wiki.surveyP2', name=name, rating=rating, bugsEncountered=bugsEncountered, suggestions=suggestions))
     else:
         # Render a template if GET request
         return render_template("home.html")
@@ -310,16 +307,6 @@ def survey():
 @bp.route("/survey_confirmation")
 def survey_confirmation():
     return render_template("survey_confirmation.html")
-
-
-@bp.route("/surveyP2")
-def surveyP2():
-    name = request.args.get('name')
-    rating = request.args.get('rating')
-    bugsEncountered = request.args.get('bugsEncountered')
-    suggestions = request.args.get('suggestions')
-
-    return f"<h1>Survey Results</h1><p>Name: {name}</p><p>Rating: {rating}</p><p>Bugs Encountered: {bugsEncountered}</p><p>Suggestions: {suggestions}</p>"
 
 
 
