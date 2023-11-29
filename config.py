@@ -6,8 +6,8 @@ HISTORY_SHOW_MAX=30
 PIC_BASE = '/static/content/'
 
 #!!! Be sure to change these directory information 
-CONTENT_DIR = '/Users/ssutt/Documents/CSC_440/Riki-Repo/440project/content' 
-USER_DIR = '/Users/ssutt/Documents/CSC_440/Riki-Repo/440project/user'
+CONTENT_DIR = '/Users/jacob/Riki/content'
+USER_DIR = '/Users/jacob/Riki/user'
 
 NUMBER_OF_HISTORY = 5
 PRIVATE = True

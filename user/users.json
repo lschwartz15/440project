@@ -3,7 +3,7 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "12345678",
-    "authenticated": true,
+    "authenticated": false,
     "roles": []
   },
   "sam": {
@@ -25,6 +25,13 @@
     "authentication_method": "cleartext",
     "password": "password",
     "authenticated": false,
+    "roles": []
+  },
+  "jacob": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "TeamAlpha",
+    "authenticated": true,
     "roles": []
   }
 }

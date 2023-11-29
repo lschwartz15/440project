@@ -58,5 +58,11 @@
         "rating": "4",
         "bugsEncountered": "no",
         "suggestions": "Great job!"
+    },
+    {
+        "name": "",
+        "rating": "",
+        "bugsEncountered": null,
+        "suggestions": ""
     }
 ]
