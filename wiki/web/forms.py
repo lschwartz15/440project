@@ -53,14 +53,14 @@ class LoginForm(FlaskForm):
     def validate_name(self, field):
         user = current_users.get_user(field.data)
         if not user:
-            raise ValidationError('Invalid username.')
+            raise ValidationError('Invalid Username.')
 
     def validate_password(self, field):
         user = current_users.get_user(self.name.data)
         if not user:
             return
         if not user.check_password(field.data):
-            raise ValidationError('Invalid username or password.')
+            raise ValidationError('Invalid Password.')
 
 
 class SignUpForm(FlaskForm):

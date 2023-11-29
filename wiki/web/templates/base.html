@@ -27,12 +27,12 @@
 							</ul>
 
 							<ul class="nav pull-right">
-                            <li><a href="{{ url_for('wiki.signup') }}">Sign Up</a></li>
-                            {% if current_user.is_anonymous %}
-                                <li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
-                            {% else %}
-                                <li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
-                            {% endif %}
+                                <li><a href="{{ url_for('wiki.signup') }}">Sign Up</a></li>
+                                {% if current_user.is_authenticated %}
+                                    <li><a href="{{ url_for('wiki.user_logout') }}">Logout</a></li>
+                                {% else %}
+                                    <li><a href="{{ url_for('wiki.user_login') }}">Login</a></li>
+                                {% endif %}
                             </ul>
 						</div>
 					</div>
@@ -63,8 +63,16 @@
 						{% endif %}
 					{% endwith %}
 					{% if form and form.errors %}
-						<div class="alert alert-error">Errors occured verifying your input. Please check the marked fields below.</div>
-					{% endif %}
+                        <div class="alert alert-error">
+                            {% if 'name' in form.errors %}
+                                    {{ form.errors['name'][0] }}
+                            {% elif 'password' in form.errors %}
+                                {{ form.errors['password'][0] }}
+                            {% else %}
+                                Errors occurred verifying your input. Please check the marked fields below.
+                            {% endif %}
+                        </div>
+                    {% endif %}
 					{% block content %}
 					{% endblock content %}
 				</div>

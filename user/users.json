@@ -2,29 +2,29 @@
   "name": {
     "active": true,
     "authentication_method": "cleartext",
-    "password": "1234",
+    "password": "12345678",
     "authenticated": true,
     "roles": []
   },
   "sam": {
     "active": true,
     "authentication_method": "cleartext",
-    "password": "1234",
+    "password": "12345678",
     "authenticated": true,
     "roles": []
   },
-  "JohnDoe": {
+  "JoeDoe": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "password",
-    "authenticated": true,
+    "authenticated": false,
     "roles": []
   },
   "JaneDoe": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "password",
-    "authenticated": true,
+    "authenticated": false,
     "roles": []
   }
 }

@@ -202,10 +202,20 @@ def user_login():
         user_input_code = form.totp.data
 
         user = current_users.get_user(username)
+
+        if user is None:
+            flash("User does not exist. Please sign up.")
+            return redirect(url_for('wiki.signup'))
+
+        # Check password
+        if not user.check_password(form.password.data):
+            flash("Invalid password. Please try again.")  # Error message
+            return render_template('login.html', form=form)
+
         # Check TOTP
         user_secret_key = session.get('random_key')
         if not user_secret_key:
-            flash("You needs to a new MFA. Please reScan the QR Code")  # Error message routes you back to MFA
+            flash("You need to set up a new MFA. Please re-scan the QR Code")  # Error message routes you back to MFA
             return render_template('mfa.html', form=form)
 
         totp = pyotp.TOTP(user_secret_key)
@@ -215,11 +225,14 @@ def user_login():
             login_user(user)
             user.set('authenticated', True)
             flash('Login successful.', 'success')
+            flash('To Logout please click on "logout"')
             return redirect(request.args.get("next") or url_for('wiki.index'))
         else:
             flash("Invalid TOTP code. Please try again.")  # Error message
 
     return render_template('login.html', form=form)
+
+
 
 
 
@@ -229,7 +242,7 @@ def user_logout():
     current_user.set('authenticated', False)
     logout_user()
     flash('Logout successful.', 'success')
-    return redirect(url_for('wiki.index'))
+    return redirect(url_for('wiki.home'))
 
 
 @bp.route('/user/')
@@ -307,9 +320,6 @@ def survey():
 @bp.route("/survey_confirmation")
 def survey_confirmation():
     return render_template("survey_confirmation.html")
-
-
-
 
 
 
