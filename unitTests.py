@@ -90,6 +90,7 @@ class SignUpFormTest(unittest.TestCase):
         print("Is reCAPTCHA checked?", form.recaptcha.data)
 
 
+# SURVEY UNIT TESTS
 class SurveyRouteTestCase(unittest.TestCase):
     def setUp(self):
         directory = os.path.dirname(os.path.abspath(__file__))
@@ -108,7 +109,7 @@ class SurveyRouteTestCase(unittest.TestCase):
             'suggestions': 'More features!'
         }
         response = self.app.post('/survey', data=survey_data)
-        self.assertEqual(response.status_code, 302)  # Assuming it redirects
+        self.assertEqual(response.status_code, 302)
 
     def test_post_survey_invalid_data(self):
         survey_data = {
@@ -116,7 +117,7 @@ class SurveyRouteTestCase(unittest.TestCase):
             'rating': '5'
         }
         response = self.app.post('/survey', data=survey_data)
-        self.assertIn(response.status_code, [400, 302])  # Depending on how you handle invalid data
+        self.assertIn(response.status_code, [400, 302])
 
     def test_survey_confirmation_route(self):
         response = self.app.get('/survey_confirmation')
@@ -131,7 +132,6 @@ class SurveyRouteTestCase(unittest.TestCase):
         }
         self.app.post('/survey', data=survey_data)
 
-        # Replace 'path_to_json_file' with the actual path to your survey results JSON file
         directory = os.path.join(os.path.dirname(__file__), 'wiki/web/')
         file_path = os.path.join(directory, 'survey_results.json')
 

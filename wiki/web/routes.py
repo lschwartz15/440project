@@ -274,19 +274,14 @@ def survey():
             "suggestions": suggestions
         }
 
-        # Create a simple HTML response for the confirmation message
         confirmation_html = "<div>Thank you for submitting the survey!</div>"
 
-        # Get the directory of the current file (routes.py)
         directory = os.path.dirname(os.path.realpath(__file__))
 
-        # File path for the JSON file
         file_path = os.path.join(directory, 'survey_results.json')
 
-        # Initialize data as an empty list
         data = []
 
-        # Read existing data, if file exists and is not empty
         if os.path.isfile(file_path) and os.path.getsize(file_path) > 0:
             with open(file_path, 'r') as file:
                 try:
