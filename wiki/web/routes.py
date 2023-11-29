@@ -8,12 +8,17 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import session
+from flask import send_from_directory
 from flask_login import current_user
 from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
+from wtforms.validators import ValidationError
+
 
 from wiki.core import Processor
+from wiki.web.forms import SignUpForm
 from wiki.web.forms import EditorForm
 from wiki.web.forms import LoginForm
 from wiki.web.forms import SearchForm
@@ -24,6 +29,10 @@ from wiki.web.user import protect
 import os
 import json
 
+import pyotp
+import qrcode
+import os
+import random
 
 
 bp = Blueprint('wiki', __name__)
@@ -132,16 +141,99 @@ def search():
     return render_template('search.html', form=form, search=None)
 
 
+@bp.route('/signup/', methods=['GET', 'POST'])
+def signup():
+    form = SignUpForm()
+    if form.validate_on_submit():
+        try:
+            form.save_user_to_json()
+            flash('Signup successful!', 'success')
+            return redirect(url_for('wiki.mfa', name=form.name.data))
+        except ValidationError as e:
+            flash(str(e), 'danger')
+
+    page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
+    return render_template('signup.html', form=form, page=page_data)
+
+
+
+@bp.route('/mfa', methods=['GET'])
+def mfa():
+    page = {'title': 'MFA Page'}
+    user_name = request.args.get('name')
+    issuer_name = "Riki"
+
+    # Random generate of the secret key
+    key = pyotp.random_base32()
+
+    # Temporary One Time Password
+    totp = pyotp.TOTP(key)
+    uri = totp.provisioning_uri(name=user_name, issuer_name=issuer_name)
+
+    # Generate the users for the QR code image filename with the user name
+    qrcode_filename = f"{user_name}_totp_qr_code.png"
+
+    # Specify the folder where your QR code images are stored
+    qrcode_folder = os.path.join(os.path.abspath("wiki/web/static/QRimages"))
+
+    # Construct the full path to the QR code image
+    qrcode_path = os.path.join(qrcode_folder, qrcode_filename)
+
+    # Create and save the QR code image
+    qrcode.make(uri).save(qrcode_path)
+
+    # Store the generated key in the session for later use in the /login route
+    session['random_key'] = key
+
+    return render_template('mfa.html', page=page, qrcode_path=qrcode_path, qrcode_filename=qrcode_filename)
+
+
+@bp.route('/QRimages/<filename>')
+def path_static(filename):
+    return send_from_directory(os.path.abspath("wiki/web/static/QRimages"), filename)
+
+
 @bp.route('/user/login/', methods=['GET', 'POST'])
 def user_login():
     form = LoginForm()
-    if form.validate_on_submit():
-        user = current_users.get_user(form.name.data)
-        login_user(user)
-        user.set('authenticated', True)
-        flash('Login successful.', 'success')
-        return redirect(request.args.get("next") or url_for('wiki.index'))
+
+    if request.method == 'POST' and form.validate_on_submit():
+        username = form.name.data
+        user_input_code = form.totp.data
+
+        user = current_users.get_user(username)
+
+        if user is None:
+            flash("User does not exist. Please sign up.")
+            return redirect(url_for('wiki.signup'))
+
+        # Check password
+        if not user.check_password(form.password.data):
+            flash("Invalid password. Please try again.")  # Error message
+            return render_template('login.html', form=form)
+
+        # Check TOTP
+        user_secret_key = session.get('random_key')
+        if not user_secret_key:
+            flash("You need to set up a new MFA. Please re-scan the QR Code")  # Error message routes you back to MFA
+            return render_template('mfa.html', form=form)
+
+        totp = pyotp.TOTP(user_secret_key)
+        is_valid = totp.verify(user_input_code)
+
+        if is_valid:
+            login_user(user)
+            user.set('authenticated', True)
+            flash('Login successful.', 'success')
+            flash('To Logout please click on "logout"')
+            return redirect(request.args.get("next") or url_for('wiki.index'))
+        else:
+            flash("Invalid TOTP code. Please try again.")  # Error message
+
     return render_template('login.html', form=form)
+
+
+
 
 
 @bp.route('/user/logout/')
@@ -150,7 +242,7 @@ def user_logout():
     current_user.set('authenticated', False)
     logout_user()
     flash('Logout successful.', 'success')
-    return redirect(url_for('wiki.index'))
+    return redirect(url_for('wiki.home'))
 
 
 @bp.route('/user/')
@@ -228,9 +320,6 @@ def survey():
 @bp.route("/survey_confirmation")
 def survey_confirmation():
     return render_template("survey_confirmation.html")
-
-
-
 
 
 
