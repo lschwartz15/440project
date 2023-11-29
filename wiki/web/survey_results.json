@@ -61,8 +61,44 @@
     },
     {
         "name": "",
+<<<<<<< HEAD
         "rating": "",
         "bugsEncountered": null,
         "suggestions": ""
+=======
+        "rating": "5",
+        "bugsEncountered": null,
+        "suggestions": null
+    },
+    {
+        "name": "Test User",
+        "rating": "5",
+        "bugsEncountered": "yes",
+        "suggestions": "More features!"
+    },
+    {
+        "name": "Test User",
+        "rating": "4",
+        "bugsEncountered": "no",
+        "suggestions": "Great job!"
+    },
+    {
+        "name": "",
+        "rating": "5",
+        "bugsEncountered": null,
+        "suggestions": null
+    },
+    {
+        "name": "Test User",
+        "rating": "5",
+        "bugsEncountered": "yes",
+        "suggestions": "More features!"
+    },
+    {
+        "name": "Test User",
+        "rating": "4",
+        "bugsEncountered": "no",
+        "suggestions": "Great job!"
+>>>>>>> 66cb0b11d5dffc2a4fa6f92fc534a381e6bd861a
     }
 ]

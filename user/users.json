@@ -27,11 +27,27 @@
     "authenticated": false,
     "roles": []
   },
+<<<<<<< HEAD
   "jacob": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "TeamAlpha",
     "authenticated": true,
     "roles": []
+=======
+  "JohnDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": true,
+    "roles": []
+  },
+  "JessDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
+>>>>>>> 66cb0b11d5dffc2a4fa6f92fc534a381e6bd861a
   }
 }
