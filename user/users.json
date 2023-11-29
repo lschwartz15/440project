@@ -26,5 +26,19 @@
     "password": "password",
     "authenticated": false,
     "roles": []
+  },
+  "JohnDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": true,
+    "roles": []
+  },
+  "JessDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
   }
 }

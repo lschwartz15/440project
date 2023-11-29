@@ -203,15 +203,6 @@ def user_login():
 
         user = current_users.get_user(username)
 
-        if user is None:
-            flash("User does not exist. Please sign up.")
-            return redirect(url_for('wiki.signup'))
-
-        # Check password
-        if not user.check_password(form.password.data):
-            flash("Invalid password. Please try again.")  # Error message
-            return render_template('login.html', form=form)
-
         # Check TOTP
         user_secret_key = session.get('random_key')
         if not user_secret_key:
