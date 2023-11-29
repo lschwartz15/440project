@@ -225,7 +225,7 @@ def user_login():
             login_user(user)
             user.set('authenticated', True)
             flash('Login successful.', 'success')
-            flash('To Logout please click on "logout"')
+            flash('To Logout please click on "Logout"')
             return redirect(request.args.get("next") or url_for('wiki.index'))
         else:
             flash("Invalid TOTP code. Please try again.")  # Error message
