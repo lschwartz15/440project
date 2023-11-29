@@ -211,6 +211,19 @@ class PageVersionManager(object):
     def restore_page(self, timestamp):
         shutil.copyfile(self.dir_path + '/' + timestamp.replace(':', ' ') + '.md', self.page_path)
 
+    def restore_page_by_index(self, index):
+        try:
+            index = int(index)
+        except:
+            return False
+        edits = self.get_edits()
+        i = 0
+        for timestamp in edits:
+            if i == index:
+                self.restore_page(timestamp)
+                return True
+            i += 1
+
     def get_timestamp(self):
         dt = datetime.datetime.now()
         return dt.strftime('%b %d %Y %X')

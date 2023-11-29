@@ -12,5 +12,19 @@
     "password": "1234",
     "authenticated": true,
     "roles": []
+  },
+  "eric_jackman": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "pass",
+    "authenticated": true,
+    "roles": []
+  },
+  "TEST": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "TEST",
+    "authenticated": true,
+    "roles": []
   }
 }

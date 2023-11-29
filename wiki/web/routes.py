@@ -87,9 +87,12 @@ def edit(url):
 @bp.route('/edit/<path:url>/<path:version>/', methods=['GET', 'POST'])
 @protect
 def restore(url, version):
-	version = version.replace('_', ' ', 3).replace('_', ':')
 	pageVersionManager = PageVersionManager(url, current_user.name)
-	pageVersionManager.restore_page(version)
+	if len(version) == 1:
+		pageVersionManager.restore_page_by_index(version)
+	else:
+		version = version.replace('_', ' ', 3).replace('_', ':')
+		pageVersionManager.restore_page(version)
 	flash('Version from "%s" was restored.' % version, 'success')
 	return redirect(url_for('wiki.display', url=url))
 
