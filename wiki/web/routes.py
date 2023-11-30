@@ -202,7 +202,6 @@ def user_login():
         user_input_code = form.totp.data
 
         user = current_users.get_user(username)
-
         # Check TOTP
         user_secret_key = session.get('random_key')
         if not user_secret_key:

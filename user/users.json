@@ -26,5 +26,12 @@
     "password": "password",
     "authenticated": true,
     "roles": []
+  },
+  "SethDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": true,
+    "roles": []
   }
 }
