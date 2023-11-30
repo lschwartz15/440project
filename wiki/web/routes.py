@@ -152,7 +152,7 @@ def signup():
         except ValidationError as e:
             flash(str(e), 'danger')
 
-    page_data = {'title': 'Sign Up Page'}  # Replace with your actual page data
+    page_data = {'title': 'Sign Up Page'}
     return render_template('signup.html', form=form, page=page_data)
 
 
@@ -222,9 +222,6 @@ def user_login():
             flash("Invalid TOTP code. Please try again.")  # Error message
 
     return render_template('login.html', form=form)
-
-
-
 
 
 @bp.route('/user/logout/')

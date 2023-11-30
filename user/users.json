@@ -13,20 +13,6 @@
     "authenticated": true,
     "roles": []
   },
-  "JoeDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
-  },
-  "JaneDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
-  },
   "JohnDoe": {
     "active": true,
     "authentication_method": "cleartext",
@@ -34,11 +20,11 @@
     "authenticated": true,
     "roles": []
   },
-  "JessDoe": {
+  "JoeDoe": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "password",
-    "authenticated": false,
+    "authenticated": true,
     "roles": []
   }
 }

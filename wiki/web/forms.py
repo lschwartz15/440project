@@ -109,5 +109,3 @@ class SignUpForm(FlaskForm):
             json.dump(users_data, file, indent=2)
 
         print("Signup successful.")
-
-
