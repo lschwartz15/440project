@@ -9,10 +9,5 @@ PIC_BASE = '/static/content/'
 CONTENT_DIR = '/Users/ssutt/Documents/CSC_440/Riki-Repo/440project/content'
 USER_DIR = '/Users/ssutt/Documents/CSC_440/Riki-Repo/440project/user'
 
-# CONTENT_DIR = '/Users/HueF3/PycharmProjects/csc440_groupProject/content'
-# USER_DIR = '/Users/HueF3/PycharmProjects/csc440_groupProject/user'
-
-
-
 NUMBER_OF_HISTORY = 5
 PRIVATE = True

@@ -4,18 +4,46 @@
 
 {% block content %}
     <div>
-            {% if current_user.is_authenticated %}
-                <p>You are already logged in. <a href="{{ url_for('wiki.user_logout') }}">Logout</a></p>
-            {% else %}
-                <form class="form-inline" method="POST">
-                    {{ form.hidden_tag() }}
-                    {{ form.name(placeholder='Username', class='form-control mr-sm-2') }}
-                    {{ form.password(placeholder='Password', class='form-control mr-sm-2') }}
-                    {{ form.totp(placeholder='6 digit code', class='form-control mr-sm-2') }}
-                    <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-            {% endif %}
+        {% if current_user.is_authenticated %}
+            <p>You are already logged in. <a href="{{ url_for('wiki.user_logout') }}">Logout</a></p>
+        {% else %}
+            <form class="form-inline" method="POST">
+                {{ form.hidden_tag() }}
+                {{ form.name(placeholder='Username', class='form-control mr-sm-2') }}
+                {{ form.password(placeholder='Password', class='form-control mr-sm-2') }}
+                {{ form.totp(placeholder='6 digit code', class='form-control mr-sm-2') }}
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        {% endif %}
     </div>
+
+    <script>
+        let userNavigatingAway = false;
+
+        function showSurveyPopup() {
+            const isLoginPage = window.location.pathname === "{{ url_for('wiki.user_login') }}";
+
+            if (!isLoginPage) {
+                document.getElementById('surveyPopup').style.display = 'block';
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('surveyPopup').style.display = 'none';
+            userNavigatingAway = true;
+        }
+
+        document.addEventListener('mouseout', function (event) {
+            if (!event.toElement && !event.relatedTarget) {
+                setTimeout(showSurveyPopup, 5000);
+            }
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if (!userNavigatingAway) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
 {% endblock content %}
-
-

@@ -12,47 +12,5 @@
     "password": "12345678",
     "authenticated": true,
     "roles": []
-  },
-  "JoeDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
-  },
-  "JaneDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
-  },
-  "JohnDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": true,
-    "roles": []
-  },
-  "JessDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
-  },
-  "SallyDoe": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password1",
-    "authenticated": true,
-    "roles": []
-  },
-  "SethSutton": {
-    "active": true,
-    "authentication_method": "cleartext",
-    "password": "password",
-    "authenticated": false,
-    "roles": []
   }
 }
