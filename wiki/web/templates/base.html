@@ -65,7 +65,7 @@
 					{% if form and form.errors %}
                         <div class="alert alert-error">
                             {% if 'name' in form.errors %}
-                                    {{ form.errors['name'][0] }}
+                                {{ form.errors['name'][0] }}
                             {% elif 'password' in form.errors %}
                                 {{ form.errors['password'][0] }}
                             {% else %}
@@ -99,7 +99,9 @@
 			<form action="/survey" method="post">
 				<h2>Exit Survey</h2>
 				<p>Name:</p>
-				<p><input tupe="text" name="nm"></p>
+				<p><label>
+                    <input type="text" name="nm">
+                </label></p>
 				<div>
 					<p>Rate your experience (1-5):</p>
 					<div id="starRating">
@@ -124,7 +126,6 @@
 					<textarea name="suggestions" id="suggestions" rows="4" cols="50"></textarea>
 				</div>
 
-				<!--<button onclick="submitSurvey()">Submit</button>-->
 				<p><input type="submit" value="submit"></p>
 				<button type="button" onclick="closePopup()">Close</button>
 			</form>

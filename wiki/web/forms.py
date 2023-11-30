@@ -52,6 +52,7 @@ class LoginForm(FlaskForm):
 
     def validate_name(self, field):
         user = current_users.get_user(field.data)
+        print(f"Username: {field.data}, User: {user}")
         if not user:
             raise ValidationError('Invalid Username, try again. Click "Sign Up" if you are a new user')
 

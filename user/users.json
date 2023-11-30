@@ -40,5 +40,19 @@
     "password": "password",
     "authenticated": false,
     "roles": []
+  },
+  "SallyDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password1",
+    "authenticated": true,
+    "roles": []
+  },
+  "SethSutton": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
   }
 }
