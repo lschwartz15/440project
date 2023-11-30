@@ -24,10 +24,31 @@
     "active": true,
     "authentication_method": "cleartext",
     "password": "password",
-    "authenticated": true,
+    "authenticated": false,
     "roles": []
   },
   "SethDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": true,
+    "roles": []
+  },
+  "Jacobdoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
+  },
+  "CaptainAmerica": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
+  },
+  "DoeJoe": {
     "active": true,
     "authentication_method": "cleartext",
     "password": "password",

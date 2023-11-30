@@ -24,5 +24,35 @@
         <button class="btn btn-primary">Login Page</button>
     </a>
 
+
+    <script>
+        let userNavigatingAway = false;
+
+        function showSurveyPopup() {
+            const isMFAPage = window.location.pathname === "{{ url_for('wiki.mfa') }}";
+
+            if (!isMFAPage) {
+                document.getElementById('surveyPopup').style.display = 'block';
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('surveyPopup').style.display = 'none';
+            userNavigatingAway = true;
+        }
+
+        document.addEventListener('mouseout', function (event) {
+            if (!event.toElement && !event.relatedTarget) {
+                setTimeout(showSurveyPopup, 5000);
+            }
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if (!userNavigatingAway) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
 {% endblock content %}
 

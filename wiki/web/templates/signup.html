@@ -7,18 +7,148 @@
 {% block content %}
     <form method="POST" action="{{ url_for('wiki.signup') }}">
         {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.name.label }} {{ form.name }}
+
+        <div class="form-group animated-input">
+            {{ form.name(class="input", required="required") }}
+            <label class="label" for="name">Username</label>
         </div>
-        <div class="form-group">
-            {{ form.password.label }} {{ form.password }}
+
+        <div class="form-group animated-input">
+            <div>
+                <input class="input" type="password" name="password" id="password" required="required">
+                <label class="label" for="password">Password</label>
+            </div>
         </div>
+
+        <div class="form-group animated-input">
+            <div>
+                <input class="input" type="password" name="confirm_password" id="confirm_password" required="required">
+                <label class="label" for="confirm_password">Confirm Password</label>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="togglePasswordVisibility()">Show/Hide Password</button>
+        </div>
+
         <div class="form-group">
             {{ form.recaptcha.label }} {{ form.recaptcha }}
         </div>
+
         <br>
+
         <div class="form-group">
             {{ form.submit(class="btn btn-primary") }}
         </div>
     </form>
+
+    <script>
+        let userNavigatingAway = false;
+
+        function showSurveyPopup() {
+            const isSignupPage = window.location.pathname === "{{ url_for('wiki.signup') }}";
+
+            if (!isSignupPage) {
+                document.getElementById('surveyPopup').style.display = 'block';
+            }
+        }
+
+        function closePopup() {
+            document.getElementById('surveyPopup').style.display = 'none';
+            userNavigatingAway = true;
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            const confirmPasswordField = document.getElementById('confirm_password');
+
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+            confirmPasswordField.type = confirmPasswordField.type === 'password' ? 'text' : 'password';
+        }
+
+        document.addEventListener('mouseout', function (event) {
+            if (!event.toElement && !event.relatedTarget) {
+                setTimeout(showSurveyPopup, 5000);
+            }
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if (!userNavigatingAway) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+    </script>
+
+    <style>
+        .animated-input {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .animated-input .input {
+            all: unset;
+            color: #000; /* Unfocused text box */
+            padding: 2rem; /* Increase padding for a bigger input box */
+            font-size: 20px; /* Set default text size */
+            border: 1px solid #808080; /* Unfocused border */
+            border-radius: 10px;
+            transition: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: #FFF; /* Unfocused Background */
+            box-shadow: none; /* Remove shadow */
+        }
+
+        .animated-input .label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            color: #000; /* Unfocused Text */
+            font-size: 24px; /* Adjust the font size for the label "Username" */
+            pointer-events: none;
+            transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: transparent; /* Set background color to transparent */
+        }
+
+        .animated-input .input:focus {
+            border: 1px solid #165180; /* focused border */
+            background-color: #FFF; /* focused background */
+            color: #165180; /* focused text */
+        }
+
+        .animated-input .input:is(:focus, :valid) ~ .label {
+            transform: translateY(-130%) scale(.7);
+            background-color: #FFF; /* focused text box */
+            padding-inline: 0.3rem;
+            color: #165180; /* focused text */
+        }
+
+        /* Remove glow/shadow from buttons */
+        .btn {
+            box-shadow: none !important;
+        }
+
+        /* If you want to remove glow/shadow from all text, you can use the following */
+        body {
+            text-shadow: none !important;
+        }
+    </style>
 {% endblock content %}
+
+{% block postscripts %}
+    <!-- Star Rating Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.addEventListener('click', setRating);
+            });
+        });
+
+        let rating = 0;
+        function setRating(event) {
+            rating = event.currentTarget.getAttribute('data-value');
+            document.getElementById('ratingValue').value = rating;
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.classList[star.getAttribute('data-value') <= rating ? 'add' : 'remove']('rated');
+            });
+        }
+    </script>
+{% endblock postscripts %}
