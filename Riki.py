@@ -1,11 +1,8 @@
-#!/Users/smcho/virtualenv/riki/bin/python
-
-# -*- coding: utf-8 -*-
 import os
-
 from wiki import create_app
 
 directory = os.getcwd()
+testing_app = create_app(directory, testing=True)
 app = create_app(directory)
 
 if __name__ == '__main__':

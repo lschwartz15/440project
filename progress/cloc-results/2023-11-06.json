@@ -1,0 +1,83 @@
+{"header" : {
+  "cloc_url"           : "github.com/AlDanial/cloc",
+  "cloc_version"       : "1.98",
+  "elapsed_seconds"    : 3.04501605033875,
+  "n_files"            : 997,
+  "n_lines"            : 344654,
+  "files_per_second"   : 327.420277436333,
+  "lines_per_second"   : 112007.619783173},
+"Python" :{
+  "nFiles": 893,
+  "blank": 48050,
+  "comment": 66268,
+  "code": 215268},
+"CSS" :{
+  "nFiles": 4,
+  "blank": 47,
+  "comment": 50,
+  "code": 5993},
+"PO File" :{
+  "nFiles": 30,
+  "blank": 990,
+  "comment": 1141,
+  "code": 2978},
+"Text" :{
+  "nFiles": 27,
+  "blank": 20,
+  "comment": 0,
+  "code": 941},
+"HTML" :{
+  "nFiles": 13,
+  "blank": 29,
+  "comment": 0,
+  "code": 388},
+"JavaScript" :{
+  "nFiles": 3,
+  "blank": 38,
+  "comment": 24,
+  "code": 309},
+"C" :{
+  "nFiles": 1,
+  "blank": 36,
+  "comment": 6,
+  "code": 278},
+"reStructuredText" :{
+  "nFiles": 8,
+  "blank": 38,
+  "comment": 0,
+  "code": 178},
+"XML" :{
+  "nFiles": 6,
+  "blank": 0,
+  "comment": 1,
+  "code": 163},
+"Markdown" :{
+  "nFiles": 6,
+  "blank": 27,
+  "comment": 0,
+  "code": 74},
+"Fish Shell" :{
+  "nFiles": 1,
+  "blank": 18,
+  "comment": 14,
+  "code": 68},
+"DOS Batch" :{
+  "nFiles": 3,
+  "blank": 8,
+  "comment": 0,
+  "code": 47},
+"PowerShell" :{
+  "nFiles": 1,
+  "blank": 10,
+  "comment": 4,
+  "code": 46},
+"JSON" :{
+  "nFiles": 1,
+  "blank": 0,
+  "comment": 0,
+  "code": 16},
+"SUM": {
+  "blank": 49311,
+  "comment": 67508,
+  "code": 226243,
+  "nFiles": 997} }
