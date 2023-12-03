@@ -10,5 +10,23 @@
         "rating": "",
         "bugsEncountered": null,
         "suggestions": ""
+    },
+    {
+        "name": "",
+        "rating": "5",
+        "bugsEncountered": null,
+        "suggestions": null
+    },
+    {
+        "name": "Test User",
+        "rating": "5",
+        "bugsEncountered": "yes",
+        "suggestions": "More features!"
+    },
+    {
+        "name": "Test User",
+        "rating": "4",
+        "bugsEncountered": "no",
+        "suggestions": "Great job!"
     }
 ]

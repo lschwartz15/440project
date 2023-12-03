@@ -19,5 +19,12 @@
     "password": "password",
     "authenticated": false,
     "roles": []
+  },
+  "huehuehue": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "heuhuehue",
+    "authenticated": true,
+    "roles": []
   }
 }
