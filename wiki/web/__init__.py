@@ -29,7 +29,7 @@ def get_users():
 current_users = LocalProxy(get_users)
 
 
-def create_app(directory):
+def create_app(directory, testing=False):
     app = Flask(__name__)
     app.config['CONTENT_DIR'] = directory
     app.config['TITLE'] = 'wiki'
@@ -39,6 +39,10 @@ def create_app(directory):
     app.config["RECAPTCHA_PUBLIC_KEY"] = "6LettxwpAAAAAFrwnb1R8aDYPBTJTw3xO3tHZ1iX"
     app.config["RECAPTCHA_PRIVATE_KEY"] = "6LettxwpAAAAAM8PhBfFxBQBMRGtseYCrFd9nxt5"
     app.config["RECAPTCHA_OPTIONS"] = {'theme': 'black'}
+
+    if testing:
+        app.config['TESTING'] = True
+
     try:
         app.config.from_pyfile(
             os.path.join(app.config.get('CONTENT_DIR'), 'config.py')
