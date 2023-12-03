@@ -10,5 +10,41 @@
         "rating": "",
         "bugsEncountered": null,
         "suggestions": ""
+    },
+    {
+        "name": "",
+        "rating": "5",
+        "bugsEncountered": null,
+        "suggestions": null
+    },
+    {
+        "name": "Test User",
+        "rating": "5",
+        "bugsEncountered": "yes",
+        "suggestions": "More features!"
+    },
+    {
+        "name": "Test User",
+        "rating": "4",
+        "bugsEncountered": "no",
+        "suggestions": "Great job!"
+    },
+    {
+        "name": "eren yeager",
+        "rating": "4",
+        "bugsEncountered": "yes",
+        "suggestions": "ren"
+    },
+    {
+        "name": "natsu dragneel",
+        "rating": "4",
+        "bugsEncountered": "yes",
+        "suggestions": "please fix the color"
+    },
+    {
+        "name": "sasuke uchiha",
+        "rating": "4",
+        "bugsEncountered": "yes",
+        "suggestions": "sharingan"
     }
 ]

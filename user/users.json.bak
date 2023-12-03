@@ -1,0 +1,61 @@
+{
+  "name": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "12345678",
+    "authenticated": false,
+    "roles": []
+  },
+  "sam": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "12345678",
+    "authenticated": true,
+    "roles": []
+  },
+  "JohnDoe": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "password",
+    "authenticated": false,
+    "roles": []
+  },
+<<<<<<< HEAD
+=======
+  "testinghue": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "testinghue",
+    "authenticated": true,
+    "roles": []
+  },
+  "helloAgain": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "TempPass123!",
+    "authenticated": true,
+    "roles": []
+  },
+  "erenyeager": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "erenyeager",
+    "authenticated": true,
+    "roles": []
+  },
+  "leviackerman": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "leviackerman",
+    "authenticated": true,
+    "roles": []
+  },
+  "mikasaackerman": {
+    "active": true,
+    "authentication_method": "cleartext",
+    "password": "mikasaackerman",
+    "authenticated": true,
+    "roles": []
+  }
+>>>>>>> 43ae6b6e067c1224b529441eb65ce5f75e54f3ca
+}

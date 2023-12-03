@@ -5,5 +5,22 @@
     }
 
     .star.rated {
-        color: gold;
+        color: blue;
+    }
+
+    /*.star:active{*/
+    /*     transform: scale(.98);*/
+    /*     transition: 0.2s;*/
+    /*}*/
+
+    #surveyPopup {
+        border: solid blue 5px;
+        display: none;
+        border-radius: 5px;
+        padding: 0px;
+    }
+
+    #surveyPopup form{
+        /*border: solid red 5px;*/
+        text-align: center;
     }
