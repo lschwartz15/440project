@@ -126,8 +126,9 @@
 					<textarea name="suggestions" id="suggestions" rows="4" cols="50"></textarea>
 				</div>
 
-				<p><input type="submit" value="submit"></p>
-				<button type="button" onclick="closePopup()">Close</button>
+				<p><input id="btnSubmit" type="submit" value="submit"></p>
+{#                <button id="btnSubmit" type="submit" value="submit">Submit</button>#}
+				<button id="btnClose" type="button" onclick="closePopup()">close</button>
 			</form>
 		</div>
 
@@ -173,6 +174,7 @@
 					star.classList[star.getAttribute('data-value') <= rating ? 'add' : 'remove']('rated');
 				});
 			}
+
 		</script>
 	</body>
 </html>
