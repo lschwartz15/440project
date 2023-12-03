@@ -2,10 +2,14 @@
     Wiki core
     ~~~~~~~~~
 """
+import shutil
 from collections import OrderedDict
+from config import CONTENT_DIR
 from io import open
 import os
 import re
+import datetime
+import json
 
 from flask import abort
 from flask import url_for
@@ -162,6 +166,67 @@ class Processor(object):
         self.process_post()
 
         return self.final, self.markdown, self.meta
+
+
+class PageVersionManager(object):
+    def __init__(self, url, user):
+        self.url = url
+        self.user = user
+        self.page_path = CONTENT_DIR + '/' + url + '.md'
+        self.dir_path = CONTENT_DIR + '/_' + url
+        self.edits_path = CONTENT_DIR + '/_' + url + '/edits.json'
+
+    def get_edits(self):
+        if not os.path.exists(self.edits_path):
+            return {}
+        with open(self.edits_path) as f:
+            data = json.loads(f.read())
+        return data
+
+    def create_page(self):
+        os.mkdir(self.dir_path)
+        timestamp = self.get_timestamp()
+        edit = {timestamp: {'user': self.user}}
+        if not os.path.exists(self.edits_path):
+            with open(self.edits_path, "w") as f:
+                f.write(json.dumps(edit, indent=2))
+        shutil.copyfile(self.page_path, self.dir_path + '/' + timestamp.replace(':', ' ') + '.md')
+
+    def delete_page(self):
+        if os.path.exists(self.edits_path):
+            os.remove(self.edits_path)
+        if os.path.exists(self.dir_path):
+            shutil.rmtree(self.dir_path)
+        return
+
+    def update_page(self):
+        data = self.get_edits()
+        timestamp = self.get_timestamp()
+        data[timestamp] = {'user': self.user}
+        if os.path.exists(self.edits_path):
+            with open(self.edits_path, "w") as f:
+                f.write(json.dumps(data, indent=2))
+        shutil.copyfile(self.page_path, self.dir_path + '/' + timestamp.replace(':', ' ') + '.md')
+
+    def restore_page(self, timestamp):
+        shutil.copyfile(self.dir_path + '/' + timestamp.replace(':', ' ') + '.md', self.page_path)
+
+    def restore_page_by_index(self, index):
+        try:
+            index = int(index)
+        except:
+            return False
+        edits = self.get_edits()
+        i = 0
+        for timestamp in edits:
+            if i == index:
+                self.restore_page(timestamp)
+                return True
+            i += 1
+
+    def get_timestamp(self):
+        dt = datetime.datetime.now()
+        return dt.strftime('%b %d %Y %X')
 
 
 class Page(object):
